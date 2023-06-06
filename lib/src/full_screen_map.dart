@@ -37,6 +37,20 @@ class _FullScreenMapState extends State<FullScreenMap> {
       children: [
         FloatingActionButton(
           onPressed: () {
+            mapController!.addSymbol(SymbolOptions(
+                textField: 'Punto de partida',
+                textOffset: const Offset(0, 1),
+                geometry: center,
+                iconSize: 10,
+                iconImage: 'marker-15'));
+          },
+          child: const Icon(Icons.sentiment_dissatisfied),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        FloatingActionButton(
+          onPressed: () {
             mapController!.animateCamera(CameraUpdate.zoomIn());
           },
           child: const Icon(Icons.zoom_in),
