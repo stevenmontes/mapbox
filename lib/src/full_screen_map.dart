@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'dart:async'; // ignore: unnecessary_import
+import 'dart:core';
+import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 
 class FullScreenMap extends StatefulWidget {
   const FullScreenMap({super.key});
@@ -21,6 +25,26 @@ class _FullScreenMapState extends State<FullScreenMap> {
 
   _onMapCreated(MapboxMapController controller) {
     mapController = controller;
+    _onStyleLoaded();
+  }
+
+  void _onStyleLoaded() {
+    addImageFromAsset("assetImage", "assets/custom-icon.png");
+    addImageFromUrl(
+        "networkImage", Uri.parse("https://via.placeholder.com/50"));
+  }
+
+  /// Adds an asset image to the currently displayed style
+  Future<void> addImageFromAsset(String name, String assetName) async {
+    final ByteData bytes = await rootBundle.load(assetName);
+    final Uint8List list = bytes.buffer.asUint8List();
+    return mapController!.addImage(name, list);
+  }
+
+  /// Adds a network image to the currently displayed style
+  Future<void> addImageFromUrl(String name, Uri uri) async {
+    var response = await http.get(uri);
+    return mapController!.addImage(name, response.bodyBytes);
   }
 
   @override
@@ -41,8 +65,7 @@ class _FullScreenMapState extends State<FullScreenMap> {
                 textField: 'Punto de partida',
                 textOffset: const Offset(0, 1),
                 geometry: center,
-                iconSize: 10,
-                iconImage: 'marker-15'));
+                iconImage: 'networkImage'));
           },
           child: const Icon(Icons.sentiment_dissatisfied),
         ),
