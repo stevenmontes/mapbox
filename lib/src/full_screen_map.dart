@@ -26,24 +26,46 @@ class _FullScreenMapState extends State<FullScreenMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              if (selectedTheme == darkThemeMap) {
-                selectedTheme = monochromeThemeMap;
-              } else {
-                selectedTheme = darkThemeMap;
-              }
-
-              setState(() {});
-            },
-            child: Icon(Icons.add_to_home_screen),
-          )
-        ],
-      ),
+      floatingActionButton: floatingButtons(),
       body: createMap(),
+    );
+  }
+
+  Column floatingButtons() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        FloatingActionButton(
+          onPressed: () {
+            mapController!.animateCamera(CameraUpdate.zoomIn());
+          },
+          child: const Icon(Icons.zoom_in),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        FloatingActionButton(
+          onPressed: () {
+            mapController!.animateCamera(CameraUpdate.zoomOut());
+          },
+          child: const Icon(Icons.zoom_out),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        FloatingActionButton(
+          onPressed: () {
+            if (selectedTheme == darkThemeMap) {
+              selectedTheme = monochromeThemeMap;
+            } else {
+              selectedTheme = darkThemeMap;
+            }
+
+            setState(() {});
+          },
+          child: const Icon(Icons.add_to_home_screen),
+        )
+      ],
     );
   }
 
